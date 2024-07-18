@@ -36,14 +36,14 @@ export async function loginUserHandler(
     const validatedUser = await validatePassword({ email, password });
 
     const accessToken = signJWT(validatedUser, {
-      expiresIn: process.env.ACCESS_TOKEN_LIVE,
+      expiresIn: process.env.ACCESS_TOKEN_LIFE,
     });
 
     if (!accessToken)
       return res.status(400).json({ msg: "Fail to generate access token" });
 
     const refreshToken = signJWT(validatedUser, {
-      expiresIn: process.env.REFRESH_TOKEN_LIVE,
+      expiresIn: process.env.REFRESH_TOKEN_LIFE,
     });
 
     if (!refreshToken)
