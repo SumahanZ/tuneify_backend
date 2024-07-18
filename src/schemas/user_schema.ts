@@ -14,4 +14,16 @@ export const createUserInputSchema = object({
   }),
 });
 
+export const loginUserInputSchema = object({
+  body: object({
+    password: string({
+      required_error: "Password is required",
+    }).min(6, "Password too short -  should be 6 chars minimum"),
+    email: string({
+      required_error: "Email is required",
+    }).email("Not a valid email"),
+  }),
+});
+
 export type CreateUserInput = z.infer<typeof createUserInputSchema>;
+export type LoginUserInput = z.infer<typeof loginUserInputSchema>;

@@ -1,7 +1,12 @@
 import { Request, Response } from "express";
-import { CreateUserInput } from "../../schemas/user_schema";
+import { CreateUserInput, LoginUserInput } from "../../schemas/user_schema";
 import { createUser, validatePassword } from "./user_service";
 import { signJWT } from "../../utils/jwtUtils";
+
+type LoginInput = {
+  email: string;
+  password: string;
+};
 
 export async function signupUserHandler(
   req: Request<{}, {}, CreateUserInput, {}>,
@@ -20,7 +25,7 @@ export async function signupUserHandler(
 }
 
 export async function loginUserHandler(
-  req: Request<{}, {}, CreateUserInput, {}>,
+  req: Request<{}, {}, LoginUserInput, {}>,
   res: Response
 ) {
   const {
