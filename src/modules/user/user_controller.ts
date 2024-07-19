@@ -2,37 +2,30 @@ import { Request, Response } from "express";
 import { CreateUserInput, LoginUserInput } from "../../schemas/user_schema";
 import { createUser, validatePassword } from "./user_service";
 import { signJWT } from "../../utils/jwtUtils";
-
-type LoginInput = {
-  email: string;
-  password: string;
-};
+import log from "../../utils/logger";
 
 export async function signupUserHandler(
-  req: Request<{}, {}, CreateUserInput, {}>,
+  req: Request<{}, {}, CreateUserInput["body"], {}>,
   res: Response
 ) {
-  const {
-    body: { name, email, password },
-  } = req.body;
+  const { name, email, password } = req.body;
 
   try {
     const newUser = await createUser({ name, email, password });
-    return res.status(201).json({ msg: "User successfully created!", newUser });
+    return res.status(201).json({ user: newUser });
   } catch (err) {
+    log.error(err);
     return res.status(404).json({ msg: "User signup unsuccessful!" });
   }
 }
 
 export async function loginUserHandler(
-  req: Request<{}, {}, LoginUserInput, {}>,
+  req: Request<{}, {}, LoginUserInput["body"], {}>,
   res: Response
 ) {
-  const {
-    body: { email, password },
-  } = req.body;
-
   try {
+    const { email, password } = req.body;
+
     const validatedUser = await validatePassword({ email, password });
 
     const accessToken = signJWT(validatedUser, {
@@ -40,18 +33,16 @@ export async function loginUserHandler(
     });
 
     if (!accessToken)
-      return res.status(400).json({ msg: "Fail to generate access token" });
+      return res.status(400).json({ msg: "Failed to generate access token" });
 
     const refreshToken = signJWT(validatedUser, {
       expiresIn: process.env.REFRESH_TOKEN_LIFE,
     });
 
     if (!refreshToken)
-      return res.status(400).json({ msg: "Fail to generate refresh token!" });
+      return res.status(400).json({ msg: "Failed to generate refresh token!" });
 
-    return res
-      .status(200)
-      .json({ msg: "User login successful!", accessToken, refreshToken });
+    return res.status(200).json({ accessToken, refreshToken });
   } catch (err) {
     return res.status(400).json({ msg: "User login unsuccessful!" });
   }

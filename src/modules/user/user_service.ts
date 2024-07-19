@@ -1,10 +1,10 @@
 import { omit } from "lodash";
-import { UserBody, UserDocument, UserModel } from "./user_model";
+import { UserInput, UserDocument, UserModel } from "./user_model";
 import { FilterQuery } from "mongoose";
 import bcrypt from "bcrypt";
 import log from "../../utils/logger";
 
-export async function createUser(input: UserBody) {
+export async function createUser(input: UserInput) {
   try {
     const createdUser = await UserModel.create(input);
     if (!createdUser) throw new Error("User created unsuccessfully!");

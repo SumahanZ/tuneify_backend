@@ -1,4 +1,4 @@
-import Router from "express";
+import { Router } from "express";
 import { loginUserHandler, signupUserHandler } from "./user_controller";
 import { validateSchema } from "../../middlewares/validateSchema";
 import { createUserInputSchema } from "../../schemas/user_schema";

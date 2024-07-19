@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-export interface UserBody {
+export interface UserInput {
   email: string;
   name: string;
   password: string;
 }
 
-export interface UserDocument extends UserBody, mongoose.Document {
+export interface UserDocument extends UserInput, mongoose.Document {
   updatedAt: Date;
   createdAt: Date;
 }
@@ -42,17 +42,5 @@ userSchema.pre("save", async function (next) {
   user.password = hashedPassword;
   return next();
 });
-
-// userSchema.methods.comparePassword = async function (
-//   candidatePassword: string
-// ): Promise<boolean> {
-//   const user = this as UserDocument;
-//   try {
-//     return await bcrypt.compare(candidatePassword, user.password);
-//   } catch (err) {
-//     log.error(err);
-//     return false;
-//   }
-// };
 
 export const UserModel = mongoose.model<UserDocument>("User", userSchema);

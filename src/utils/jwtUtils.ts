@@ -12,3 +12,22 @@ export function signJWT(payload: Object, options?: jwt.SignOptions) {
     algorithm: "RS256",
   });
 }
+
+export function verifyJWT(accessToken: string) {
+  try {
+    const decodedToken = jwt.verify(accessToken, storedPublicKey);
+
+    return {
+      valid: true,
+      expired: false,
+      decodedToken,
+    };
+  } catch (err: any) {
+    //if token can't be verified we will return this object
+    return {
+      valid: false,
+      expired: err.message === "jwt expired",
+      decodedToken: null,
+    };
+  }
+}
