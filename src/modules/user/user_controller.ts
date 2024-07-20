@@ -47,3 +47,10 @@ export async function loginUserHandler(
     return res.status(400).json({ msg: "User login unsuccessful!" });
   }
 }
+
+export async function getDataHandler(
+  req: Request<{}, {}, {}, {}>,
+  res: Response
+) {
+  return res.sendStatus(200);
+}
