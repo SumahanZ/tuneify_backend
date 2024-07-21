@@ -1,5 +1,8 @@
+import path from "path";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
+import log from "../../utils/logger";
 import { SongInput, SongModel } from "./song_model";
+import { getDataURIFromMemory } from "../../utils/configureMulter";
 
 export async function createSong(input: SongInput) {
   try {
@@ -15,21 +18,24 @@ export async function uploadSongImageToStorage(filePath: {
   [fieldname: string]: Express.Multer.File[];
 }) {
   try {
-    if (!(filePath["thumbnail"][0] && filePath["artist"][0]))
+    if (!(filePath["thumbnail"][0] && filePath["audio"][0]))
       throw new Error("Provided files doesn't match");
 
+    console.log(path.dirname(filePath["thumbnail"][0].mimetype));
+
     const thumbnailResult = await uploadToCloudinary(
-      filePath["thumbnail"][0].originalname,
+      getDataURIFromMemory(filePath["thumbnail"][0].buffer, filePath["thumbnail"][0].mimetype),
       "thumbnails"
     );
 
     const audioResult = await uploadToCloudinary(
-      filePath["thumbnail"][0].originalname,
-      "thumbnails"
+      getDataURIFromMemory(filePath["audio"][0].buffer, filePath["audio"][0].mimetype),
+      "audios"
     );
 
     return { thumbnailResult, audioResult };
   } catch (err: any) {
+    log.error(err);
     throw new Error(err);
   }
 }

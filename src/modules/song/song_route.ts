@@ -10,7 +10,7 @@ const router = Router();
 router.post(
   "/song/upload-song",
   [
-    validateUser,
+    // validateUser,
     uploadMiddleware([
       { name: "thumbnail", maxCount: 1 },
       { name: "audio", maxCount: 1 },

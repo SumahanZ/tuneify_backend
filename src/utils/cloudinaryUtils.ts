@@ -8,8 +8,8 @@ export async function uploadToCloudinary(filePath: string, folderName: string) {
   });
 
   return cloudinary.uploader.upload(filePath, {
-    type: "auto",
+    resource_type: "auto",
     folder: folderName,
-    allowed_formats: ["jpg", "mp3"],
+    allowed_formats: ["jpg", "mp3", "png"],
   });
 }

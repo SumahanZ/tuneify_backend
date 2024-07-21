@@ -24,6 +24,7 @@ export async function uploadSongHandler(
         thumbnailURL: thumbnailResult.url,
         audioURL: audioResult.url,
       });
+
       return res.status(201).json({ song: newSong });
     } catch (err) {
       await Promise.all(

@@ -14,3 +14,9 @@ export function checkFileType(file: Express.Multer.File, cb: any) {
     cb("Error: Images and audio files only! (jpeg, jpg, png, gif, mp3)");
   }
 }
+
+export function getDataURIFromMemory(buffer: Buffer, mimetype: string) {
+  const b64 = Buffer.from(buffer).toString("base64");
+  let dataURI = "data:" + mimetype + ";base64," + b64;
+  return dataURI;
+}
