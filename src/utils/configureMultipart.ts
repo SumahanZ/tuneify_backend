@@ -1,17 +1,7 @@
 import multer from "multer";
 import path from "path";
-import { Request } from "express";
 
-// Configure storage engine and filename
-export const storage = multer.diskStorage({
-  destination: "./uploads/",
-  filename: function (_req: Request, file: Express.Multer.File, multerNext) {
-    multerNext(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
+export const storage = multer.memoryStorage();
 
 export function checkFileType(file: Express.Multer.File, cb: any) {
   const filetypes = /jpeg|jpg|png|gif|mpeg|/;

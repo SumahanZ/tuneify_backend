@@ -2,7 +2,11 @@ import { Router } from "express";
 import { validateUser } from "../../middlewares/validateUser";
 import { uploadMiddleware } from "../../middlewares/validateFile";
 import { validateSchema } from "../../middlewares/validateSchema";
-import { createSongInputSchema } from "../../schemas/song_schema";
+import {
+  CreateSongInput,
+  createSongInputSchema,
+} from "../../schemas/song_schema";
+import { uploadSongHandler } from "./song_controller";
 
 const router = Router();
 
@@ -16,16 +20,20 @@ router.post(
     ]),
     validateSchema(createSongInputSchema),
   ],
-  () => {}
+  uploadSongHandler
 );
 
 router.post(
   "/testCheck",
-  uploadMiddleware([
-    { name: "thumbnail", maxCount: 1 },
-    { name: "audio", maxCount: 1 },
-  ]),
-  (req, res) => {
+  [
+    uploadMiddleware([
+      { name: "thumbnail", maxCount: 1 },
+      { name: "audio", maxCount: 1 },
+    ]),
+    validateSchema(createSongInputSchema),
+  ],
+  (req: any, res: any) => {
+    console.log(req.body);
     console.log(req.files);
     return res.sendStatus(200);
   }

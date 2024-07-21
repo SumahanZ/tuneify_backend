@@ -9,12 +9,10 @@ function fileValidation(fields: FileValidationType) {
     storage: storage,
     limits: { fileSize: 30000000 },
     fileFilter: (
-      req: Request,
+      _req: Request,
       file: Express.Multer.File,
       cb: multer.FileFilterCallback
     ) => {
-      if (req.files?.length !== fields.length)
-        return cb(new Error("Fields provided does not match"));
       checkFileType(file, cb);
     },
   }).fields(fields);

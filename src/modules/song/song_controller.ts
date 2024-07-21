@@ -11,8 +11,11 @@ export async function uploadSongHandler(
   const { name, artist } = req.body;
 
   try {
-    //Upload audio and image here
-    // uploadToCloudinary();
+    const filePaths = (req.files as Express.Multer.File[]).map(
+      (file) => file.originalname
+    );
+
+    await uploadToCloudinary(filePaths, "songs");
 
     try {
       const newSong = await createSong({ name, artist });
