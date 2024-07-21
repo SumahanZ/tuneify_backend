@@ -2,7 +2,9 @@ import { NextFunction, Request } from "express";
 import multer from "multer";
 import { checkFileType, storage } from "../utils/configureMultipart";
 
-function fileValidation(fields: { name: string; maxCount: 1 }[]) {
+type FileValidationType = { name: string; maxCount: 1 }[];
+
+function fileValidation(fields: FileValidationType) {
   const upload = multer({
     storage: storage,
     limits: { fileSize: 30000000 },
