@@ -2,15 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { get } from "lodash";
 import { signJWT, verifyJWT } from "../utils/jwtUtils";
 
-export async function validateToken(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const accessToken = get(req, "headers.authorization", "").replace(
-    /^Bearer\s/,
-    ""
-  );
+export async function validateToken(req: Request, res: Response, next: NextFunction) {
+  const accessToken = get(req, "headers.authorization", "").replace(/^Bearer\s/, "");
 
   const refreshToken = get(req, "headers.x-refresh") as string;
 

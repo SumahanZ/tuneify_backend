@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { initializeRoute } from "./routeInitializer";
 import { validateToken } from "../middlewares/validateToken";
-import "./configureMultipart";
+import "./configureMulter";
 
 export function createApp() {
   const app = express();

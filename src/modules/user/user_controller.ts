@@ -32,15 +32,13 @@ export async function loginUserHandler(
       expiresIn: process.env.ACCESS_TOKEN_LIFE,
     });
 
-    if (!accessToken)
-      return res.status(400).json({ msg: "Failed to generate access token" });
+    if (!accessToken) return res.status(400).json({ msg: "Failed to generate access token" });
 
     const refreshToken = signJWT(validatedUser, {
       expiresIn: process.env.REFRESH_TOKEN_LIFE,
     });
 
-    if (!refreshToken)
-      return res.status(400).json({ msg: "Failed to generate refresh token!" });
+    if (!refreshToken) return res.status(400).json({ msg: "Failed to generate refresh token!" });
 
     return res.status(200).json({ accessToken, refreshToken });
   } catch (err) {
@@ -48,9 +46,6 @@ export async function loginUserHandler(
   }
 }
 
-export async function getDataHandler(
-  req: Request<{}, {}, {}, {}>,
-  res: Response
-) {
+export async function getDataHandler(req: Request<{}, {}, {}, {}>, res: Response) {
   return res.sendStatus(200);
 }
