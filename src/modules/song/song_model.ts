@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
-export interface UserInput {
+export interface SongInput {
   name: string;
   artist: string;
-  url: string;
+  audioURL: string;
+  thumbnailURL: string;
 }
 
-export interface SongDocument extends UserInput, mongoose.Document {
+export interface SongDocument extends SongInput, mongoose.Document {
   updatedAt: Date;
   createdAt: Date;
 }
@@ -22,7 +23,11 @@ const songSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.String,
       required: true,
     },
-    url: {
+    audioURL: {
+      type: mongoose.Schema.Types.String,
+      required: true,
+    },
+    thumbnailURL: {
       type: mongoose.Schema.Types.String,
       required: true,
     },
