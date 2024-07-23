@@ -34,13 +34,7 @@ export async function findUserById(userId: number) {
   }
 }
 
-export async function validatePassword({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) {
+export async function validatePassword({ email, password }: { email: string; password: string }) {
   try {
     const user = await UserModel.findOne({ email });
     if (!user) return false;

@@ -1,4 +1,4 @@
-import { z, object, string, array } from "zod";
+import { z, object, string } from "zod";
 
 export const createSongInputSchema = object({
   body: object({
@@ -8,6 +8,9 @@ export const createSongInputSchema = object({
     artist: string({
       required_error: "Artist Name is required",
     }).min(6, "Artist Name too short -  should be 6 chars minimum"),
+    hexCode: string({
+      required_error: "Hex Code is required",
+    }),
   }),
 });
 

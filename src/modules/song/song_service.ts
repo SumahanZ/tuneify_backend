@@ -1,8 +1,10 @@
 import path from "path";
 import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
 import log from "../../utils/logger";
-import { SongInput, SongModel } from "./song_model";
-import { getDataURIFromMemory } from "../../utils/configureMulter";
+import { SongDocument, SongInput, SongModel } from "./song_model";
+import { getDataURIFromMemory } from "../../utils/multerUtils";
+import { customID } from "../../utils/generateID";
+import { FilterQuery, QueryOptions } from "mongoose";
 
 export async function createSong(input: SongInput) {
   try {
@@ -21,21 +23,28 @@ export async function uploadSongImageToStorage(filePath: {
     if (!(filePath["thumbnail"][0] && filePath["audio"][0]))
       throw new Error("Provided files doesn't match");
 
-    console.log(path.dirname(filePath["thumbnail"][0].mimetype));
-
     const thumbnailResult = await uploadToCloudinary(
       getDataURIFromMemory(filePath["thumbnail"][0].buffer, filePath["thumbnail"][0].mimetype),
-      "thumbnails"
+      `thumbnails/${customID()}`
     );
 
     const audioResult = await uploadToCloudinary(
       getDataURIFromMemory(filePath["audio"][0].buffer, filePath["audio"][0].mimetype),
-      "audios"
+      `audios/${customID()}`
     );
 
     return { thumbnailResult, audioResult };
   } catch (err: any) {
     log.error(err);
+    throw new Error(err);
+  }
+}
+
+export async function getSongs(query?: FilterQuery<SongDocument>) {
+  try {
+    if (query) return await SongModel.find(query).lean();
+    return await SongModel.find().lean();
+  } catch (err: any) {
     throw new Error(err);
   }
 }

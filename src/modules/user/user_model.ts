@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 import bcrypt from "bcrypt";
+import { env } from "../../env";
 
 export interface UserInput {
   email: string;
@@ -7,10 +8,7 @@ export interface UserInput {
   password: string;
 }
 
-export interface UserDocument extends UserInput, mongoose.Document {
-  updatedAt: Date;
-  createdAt: Date;
-}
+export type UserDocument = InferSchemaType<typeof userSchema>;
 
 const userSchema = new mongoose.Schema(
   {
@@ -34,12 +32,10 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  let user = this as UserDocument;
-  if (!user.isModified("password")) return next();
-
-  const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS!));
-  const hashedPassword = bcrypt.hashSync(user.password, salt);
-  user.password = hashedPassword;
+  if (!this.isModified("password")) return next();
+  const salt = await bcrypt.genSalt(parseInt(env.SALT_ROUNDS));
+  const hashedPassword = bcrypt.hashSync(this.password, salt);
+  this.password = hashedPassword;
   return next();
 });
 

@@ -1,6 +1,6 @@
 import { NextFunction, Request } from "express";
 import multer from "multer";
-import { checkFileType, storage } from "../utils/configureMulter";
+import { checkFileType, storage } from "../utils/multerUtils";
 
 type FileValidationType = { name: string; maxCount: 1 }[];
 

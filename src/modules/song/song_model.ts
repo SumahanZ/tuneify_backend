@@ -1,16 +1,14 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 
 export interface SongInput {
   name: string;
   artist: string;
   audioURL: string;
   thumbnailURL: string;
+  hexCode: string;
 }
 
-export interface SongDocument extends SongInput, mongoose.Document {
-  updatedAt: Date;
-  createdAt: Date;
-}
+export type SongDocument = InferSchemaType<typeof songSchema>;
 
 const songSchema = new mongoose.Schema(
   {
@@ -28,6 +26,10 @@ const songSchema = new mongoose.Schema(
       required: true,
     },
     thumbnailURL: {
+      type: mongoose.Schema.Types.String,
+      required: true,
+    },
+    hexCode: {
       type: mongoose.Schema.Types.String,
       required: true,
     },

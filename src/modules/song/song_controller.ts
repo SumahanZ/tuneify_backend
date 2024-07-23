@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { v2 as cloudinary } from "cloudinary";
 import { CreateSongInput } from "../../schemas/song_schema";
-import { createSong, uploadSongImageToStorage } from "./song_service";
-import { uploadToCloudinary } from "../../utils/cloudinaryUtils";
+import { createSong, getSongs, uploadSongImageToStorage } from "./song_service";
 
 export async function uploadSongHandler(
   req: Request<{}, {}, CreateSongInput["body"], {}>,
   res: Response
 ) {
-  const { name, artist } = req.body;
+  const { name, artist, hexCode } = req.body;
 
   try {
     const filePaths = req.files as {
@@ -21,6 +20,7 @@ export async function uploadSongHandler(
       const newSong = await createSong({
         name,
         artist,
+        hexCode,
         thumbnailURL: thumbnailResult.url,
         audioURL: audioResult.url,
       });
@@ -35,6 +35,16 @@ export async function uploadSongHandler(
       return res.status(404).json({ msg: "User signup unsuccessful!" });
     }
   } catch (err: any) {
+    return res.status(400).json({ msg: err.message });
+  }
+}
+
+export async function fetchLatestSongsHandler(req: Request, res: Response) {
+  try {
+    const latestSongs = await getSongs();
+    return res.status(200).json(latestSongs);
+  } catch (err: any) {
+    console.log(err);
     return res.status(400).json({ msg: err.message });
   }
 }
