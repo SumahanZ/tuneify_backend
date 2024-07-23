@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import log from "../utils/logger";
-import { env } from "../env";
+import env from "../env";
 
 export default async function connectDB() {
   try {

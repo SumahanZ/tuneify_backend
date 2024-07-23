@@ -3,7 +3,7 @@ import { CreateUserInput, LoginUserInput } from "../../schemas/user_schema";
 import { createUser, validatePassword } from "./user_service";
 import { signJWT } from "../../utils/jwtUtils";
 import log from "../../utils/logger";
-import { env } from "../../env";
+import env from "../../env";
 
 export async function signupUserHandler(
   req: Request<{}, {}, CreateUserInput["body"], {}>,

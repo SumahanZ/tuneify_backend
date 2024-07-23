@@ -1,6 +1,6 @@
 import mongoose, { InferSchemaType } from "mongoose";
 import bcrypt from "bcrypt";
-import { env } from "../../env";
+import env from "../../env";
 
 export interface UserInput {
   email: string;
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  const salt = await bcrypt.genSalt(parseInt(env.SALT_ROUNDS));
+  const salt = await bcrypt.genSalt(env.SALT_ROUNDS);
   const hashedPassword = bcrypt.hashSync(this.password, salt);
   this.password = hashedPassword;
   return next();
