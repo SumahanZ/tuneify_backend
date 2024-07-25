@@ -1,5 +1,5 @@
 import { SongDocument, SongInput } from "../song/song_model";
-import { FavoriteDocument, FavoriteInput, FavoriteModel } from "./favorite_model";
+import { FavoriteDocument, FavoriteModel, FavoriteInput } from "./favorite_model";
 import { FilterQuery } from "mongoose";
 
 export async function createFavorite(input: FavoriteInput) {
@@ -14,7 +14,7 @@ export async function createFavorite(input: FavoriteInput) {
 
 export async function getFavorites(query: FilterQuery<FavoriteDocument>) {
   try {
-    return await FavoriteModel.find(query).lean();
+    return await FavoriteModel.find(query).populate("song").lean();
   } catch (err: any) {
     throw new Error(err);
   }

@@ -4,6 +4,7 @@ import { createUser, validatePassword } from "./user_service";
 import { signJWT } from "../../utils/jwtUtils";
 import log from "../../utils/logger";
 import env from "../../env";
+import { getFavorites } from "../favorite/favorite_service";
 
 export async function signupUserHandler(
   req: Request<{}, {}, CreateUserInput["body"], {}>,
@@ -29,6 +30,8 @@ export async function loginUserHandler(
 
     const validatedUser = await validatePassword({ email, password });
 
+    if (!validatedUser) return res.status(400).json({ msg: "Email or password is not valid" });
+
     const accessToken = signJWT(validatedUser, {
       expiresIn: env.ACCESS_TOKEN_LIFE,
     });
@@ -41,12 +44,20 @@ export async function loginUserHandler(
 
     if (!refreshToken) return res.status(400).json({ msg: "Failed to generate refresh token!" });
 
-    return res.status(200).json({ accessToken, refreshToken });
+    const favorites = await getFavorites({
+      user: validatedUser._id,
+    });
+
+    return res.status(200).json({ accessToken, refreshToken, user: validatedUser, favorites });
   } catch (err) {
     return res.status(400).json({ msg: "User login unsuccessful!" });
   }
 }
 
-export async function getDataHandler(req: Request<{}, {}, {}, {}>, res: Response) {
-  return res.sendStatus(200);
+export async function getDataHandler(req: Request, res: Response) {
+  const favorites = await getFavorites({
+    user: res.locals.user._id,
+  });
+
+  return res.status(200).json({ user: res.locals.user, favorites });
 }

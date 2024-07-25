@@ -9,23 +9,27 @@ export async function addRemoveFavoriteHandler(
 ) {
   try {
     const foundFavorite = await getOneFavorite({
-      user: res.locals.users,
+      user: res.locals.user._id,
       song: req.body.songId,
     });
 
-    if (foundFavorite)
+    console.log(foundFavorite);
+
+    if (foundFavorite) {
       await deleteFavorite({
-        id: foundFavorite._id,
+        _id: foundFavorite._id,
       });
+
+      return res.status(201).json({ msg: "Removed song!" });
+    }
 
     await createFavorite({
       user: res.locals.user,
       song: new ObjectId(req.body.songId),
     });
 
-    return res.status(201).json({ msg: "Successfully added/remove song from favorites!" });
+    return res.status(201).json({ msg: "Added song!" });
   } catch (err: any) {
-    console.log(err);
     return res.status(400).json({ msg: err.message });
   }
 }
@@ -33,12 +37,11 @@ export async function addRemoveFavoriteHandler(
 export async function getUserFavoritesHandler(req: Request, res: Response) {
   try {
     const userFavorites = await getFavorites({
-      id: res.locals.user,
+      user: res.locals.user._id,
     });
 
     return res.status(200).json(userFavorites);
   } catch (err: any) {
-    console.log(err);
     return res.status(400).json({ msg: err.message });
   }
 }

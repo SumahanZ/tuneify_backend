@@ -44,7 +44,6 @@ export async function fetchLatestSongsHandler(req: Request, res: Response) {
     const latestSongs = await getSongs();
     return res.status(200).json(latestSongs);
   } catch (err: any) {
-    console.log(err);
     return res.status(400).json({ msg: err.message });
   }
 }
