@@ -18,7 +18,6 @@ exports.getDataHandler = getDataHandler;
 const user_service_1 = require("./user_service");
 const jwtUtils_1 = require("../../utils/jwtUtils");
 const logger_1 = __importDefault(require("../../utils/logger"));
-const env_1 = __importDefault(require("../../env"));
 const favorite_service_1 = require("../favorite/favorite_service");
 function signupUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -41,12 +40,12 @@ function loginUserHandler(req, res) {
             if (!validatedUser)
                 return res.status(400).json({ msg: "Email or password is not valid" });
             const accessToken = (0, jwtUtils_1.signJWT)(validatedUser, {
-                expiresIn: env_1.default.ACCESS_TOKEN_LIFE,
+                expiresIn: process.env.ACCESS_TOKEN_LIFE,
             });
             if (!accessToken)
                 return res.status(400).json({ msg: "Failed to generate access token" });
             const refreshToken = (0, jwtUtils_1.signJWT)(validatedUser, {
-                expiresIn: env_1.default.REFRESH_TOKEN_LIFE,
+                expiresIn: process.env.REFRESH_TOKEN_LIFE,
             });
             if (!refreshToken)
                 return res.status(400).json({ msg: "Failed to generate refresh token!" });

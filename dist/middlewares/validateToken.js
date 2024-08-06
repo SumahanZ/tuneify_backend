@@ -8,14 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateToken = validateToken;
 const lodash_1 = require("lodash");
 const jwtUtils_1 = require("../utils/jwtUtils");
-const env_1 = __importDefault(require("../env"));
 function validateToken(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const accessToken = (0, lodash_1.get)(req, "headers.authorization", "").replace(/^Bearer\s/, "");
@@ -32,7 +28,7 @@ function validateToken(req, res, next) {
             if (expired)
                 return res.status(400).send("Refresh token is invalid");
             const newAccessToken = (0, jwtUtils_1.signJWT)({ decodedToken }, {
-                expiresIn: env_1.default.ACCESS_TOKEN_LIFE,
+                expiresIn: process.env.ACCESS_TOKEN_LIFE,
             });
             res.setHeader("x-access-token", newAccessToken);
             res.locals.user = decodedToken;

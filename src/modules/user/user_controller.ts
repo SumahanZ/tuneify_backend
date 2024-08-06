@@ -3,7 +3,6 @@ import { CreateUserInput, LoginUserInput } from "../../schemas/user_schema";
 import { createUser, validatePassword } from "./user_service";
 import { signJWT } from "../../utils/jwtUtils";
 import log from "../../utils/logger";
-import env from "../../env";
 import { getFavorites } from "../favorite/favorite_service";
 
 export async function signupUserHandler(
@@ -33,13 +32,13 @@ export async function loginUserHandler(
     if (!validatedUser) return res.status(400).json({ msg: "Email or password is not valid" });
 
     const accessToken = signJWT(validatedUser, {
-      expiresIn: env.ACCESS_TOKEN_LIFE,
+      expiresIn: process.env.ACCESS_TOKEN_LIFE,
     });
 
     if (!accessToken) return res.status(400).json({ msg: "Failed to generate access token" });
 
     const refreshToken = signJWT(validatedUser, {
-      expiresIn: env.REFRESH_TOKEN_LIFE,
+      expiresIn: process.env.REFRESH_TOKEN_LIFE,
     });
 
     if (!refreshToken) return res.status(400).json({ msg: "Failed to generate refresh token!" });

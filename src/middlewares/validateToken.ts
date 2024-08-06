@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { get } from "lodash";
 import { signJWT, verifyJWT } from "../utils/jwtUtils";
-import env from "../env";
 
 export async function validateToken(req: Request, res: Response, next: NextFunction) {
   const accessToken = get(req, "headers.authorization", "").replace(/^Bearer\s/, "");
@@ -25,7 +24,7 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
     const newAccessToken = signJWT(
       { decodedToken },
       {
-        expiresIn: env.ACCESS_TOKEN_LIFE,
+        expiresIn: process.env.ACCESS_TOKEN_LIFE,
       }
     ) as string;
 

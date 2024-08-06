@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = connectDB;
 const mongoose_1 = __importDefault(require("mongoose"));
 const logger_1 = __importDefault(require("../utils/logger"));
-const env_1 = __importDefault(require("../env"));
 function connectDB() {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         try {
-            yield mongoose_1.default.connect(env_1.default.DB_URL);
+            yield mongoose_1.default.connect((_a = process.env.DB_URL) !== null && _a !== void 0 ? _a : "");
             logger_1.default.info("Connected to DB");
         }
         catch (err) {

@@ -8,19 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadToCloudinary = uploadToCloudinary;
 const cloudinary_1 = require("cloudinary");
-const env_1 = __importDefault(require("../env"));
 function uploadToCloudinary(filePath, folderName) {
     return __awaiter(this, void 0, void 0, function* () {
         cloudinary_1.v2.config({
             cloud_name: "dkintlemd",
-            api_key: env_1.default.CLOUDINARY_API_KEY,
-            api_secret: env_1.default.CLOUDINARY_API_SECRET,
+            api_key: process.env.CLOUDINARY_API_KEY,
+            api_secret: process.env.CLOUDINARY_API_SECRET,
         });
         return cloudinary_1.v2.uploader.upload(filePath, {
             resource_type: "auto",
