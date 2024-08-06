@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const validateUser_1 = require("../../middlewares/validateUser");
+const favorite_controller_1 = require("./favorite_controller");
+const router = (0, express_1.Router)();
+router.post("/favorite", validateUser_1.validateUser, favorite_controller_1.addRemoveFavoriteHandler);
+router.get("/favorite", validateUser_1.validateUser, favorite_controller_1.getUserFavoritesHandler);
+router.use("/api", router);
+exports.default = router;
